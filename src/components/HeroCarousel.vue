@@ -67,7 +67,7 @@
 import carousel from "vue-owl-carousel";
 
 export default {
- name: "Carousel",
+ name: "HeroCarousel",
  components: {
   carousel,
  },

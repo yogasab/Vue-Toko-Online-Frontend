@@ -1,19 +1,22 @@
 <template>
  <div class="home">
   <Header />
-  <Carousel />
+  <HeroCarousel />
+  <MainCarousel></MainCarousel>
  </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
-import Carousel from "../components/Carousel.vue";
+import HeroCarousel from "../components/HeroCarousel.vue";
+import MainCarousel from "../components/MainCarousel.vue";
 
 export default {
  name: "Home",
  components: {
   Header,
-  Carousel,
+  HeroCarousel,
+  MainCarousel,
  },
 };
 </script>
