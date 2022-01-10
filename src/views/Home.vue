@@ -2,13 +2,15 @@
  <div class="home">
   <Header />
   <HeroCarousel />
-  <MainCarousel></MainCarousel>
+  <MainCarousel />
+  <InstaPhoto />
  </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
 import HeroCarousel from "../components/HeroCarousel.vue";
+import InstaPhoto from "../components/InstaPhoto.vue";
 import MainCarousel from "../components/MainCarousel.vue";
 
 export default {
@@ -17,6 +19,7 @@ export default {
   Header,
   HeroCarousel,
   MainCarousel,
+  InstaPhoto,
  },
 };
 </script>
