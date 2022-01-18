@@ -1,4 +1,4 @@
-<template>
+`<template>
  <div id="app">
   <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -9,7 +9,16 @@
 </template>
 
 <style>
-#app {
+/* @import "@/assets/css/bootstrap.min.css"; */
+/* @import "./assets/css/font-awesome.min.css";
+@import "./assets/css/themify-icons.css";
+@import "./assets/css/elegant-icons.css";
+@import "./assets/css/owl.carousel.min.css";
+@import "./assets/css/nice-select.css";
+@import "./assets/css/jquery-ui.min.css";
+@import "./assets/css/slicknav.min.css"; */
+
+/* #app {
  font-family: Avenir, Helvetica, Arial, sans-serif;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
@@ -28,5 +37,6 @@
 
 #nav a.router-link-exact-active {
  color: #42b983;
-}
+} */
 </style>
+`

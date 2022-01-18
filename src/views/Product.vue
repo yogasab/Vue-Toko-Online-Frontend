@@ -30,40 +30,18 @@
         <div class="product-thumbs">
          <carousel
           :nav="false"
-          :autoplay="true"
+          :autoplay="false"
           :dots="false"
           class="product-thumbs-track ps-slider"
          >
           <div
            class="pt"
-           @click="changeProductPhoto(photos[0])"
-           :class="photos[0] === defaultPhoto ? 'active' : ''"
+           @click="changeProductPhoto(gallery.photo)"
+           :class="gallery.photo === defaultPhoto ? 'active' : ''"
+           v-for="gallery in product.galleries"
+           :key="gallery.id"
           >
-           <img src="img/mickey1.jpg" alt="" />
-          </div>
-
-          <div
-           class="pt"
-           @click="changeProductPhoto(photos[1])"
-           :class="photos[1] === defaultPhoto ? 'active' : ''"
-          >
-           <img src="img/mickey2.jpg" alt="" />
-          </div>
-
-          <div
-           class="pt"
-           @click="changeProductPhoto(photos[2])"
-           :class="photos[2] === defaultPhoto ? 'active' : ''"
-          >
-           <img src="img/mickey3.jpg" alt="" />
-          </div>
-
-          <div
-           class="pt"
-           @click="changeProductPhoto(photos[3])"
-           :class="photos[3] === defaultPhoto ? 'active' : ''"
-          >
-           <img src="img/mickey4.jpg" alt="" />
+           <img :src="gallery.photo" alt="" />
           </div>
          </carousel>
         </div>
@@ -71,30 +49,11 @@
        <div class="col-lg-6">
         <div class="product-details text-left">
          <div class="pd-title">
-          <span>oranges</span>
-          <h3>Pure Pineapple</h3>
+          <span>{{ product.type }}</span>
+          <h3>{{ product.name }}</h3>
          </div>
-         <div class="pd-desc text-left mt-1">
-          <p>
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis,
-           error officia. Rem aperiam laborum voluptatum vel, pariatur modi hic
-           provident eum iure natus quos non a sequi, id accusantium! Autem.
-          </p>
-          <p>
-           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam
-           possimus quisquam animi, commodi, nihil voluptate nostrum neque
-           architecto illo officiis doloremque et corrupti cupiditate
-           voluptatibus error illum. Commodi expedita animi nulla aspernatur. Id
-           asperiores blanditiis, omnis repudiandae iste inventore cum, quam
-           sint molestiae accusamus voluptates ex tempora illum sit
-           perspiciatis. Nostrum dolor tenetur amet, illo natus magni veniam
-           quia sit nihil dolores. Commodi ratione distinctio harum voluptatum
-           velit facilis voluptas animi non laudantium, id dolorem atque
-           perferendis enim ducimus? A exercitationem recusandae aliquam quod.
-           Itaque inventore obcaecati, unde quam impedit praesentium veritatis
-           quis beatae ea atque perferendis voluptates velit architecto?
-          </p>
-          <h4>$495.00</h4>
+         <div class="pd-desc text-left mt-1" v-html="product.description">
+          <h4>Rp{{ product.price }}</h4>
          </div>
          <div class="quantity">
           <router-link to="/cart" class="primary-btn pd-cart"
@@ -110,7 +69,7 @@
   </section>
   <!-- Product Shop Section End -->
 
-  <RelatedProduct></RelatedProduct>
+  <RelatedProduct :product="product"></RelatedProduct>
 
   <Footer />
  </div>
@@ -121,24 +80,32 @@ import Footer from "../components/Footer.vue";
 import Header from "../components/Header.vue";
 import Carousel from "vue-owl-carousel";
 import RelatedProduct from "../components/RelatedProduct.vue";
+import axios from "axios";
 export default {
  name: "Product",
  components: { Header, Footer, Carousel, RelatedProduct },
  data() {
   return {
-   defaultPhoto: "img/mickey1.jpg",
-   photos: [
-    "img/mickey1.jpg",
-    "img/mickey2.jpg",
-    "img/mickey3.jpg",
-    "img/mickey4.jpg",
-   ],
+   defaultPhoto: null,
+   product: null,
   };
  },
  methods: {
   changeProductPhoto(photo) {
    this.defaultPhoto = photo;
   },
+  async getProduct() {
+   const product = await axios.get("http://127.0.0.1:8000/api/v1/products", {
+    params: {
+     id: this.$route.params.id,
+    },
+   });
+   this.product = product.data.data;
+   this.defaultPhoto = product.data.data.galleries[0].photo;
+  },
+ },
+ mounted() {
+  this.getProduct();
  },
 };
 </script>

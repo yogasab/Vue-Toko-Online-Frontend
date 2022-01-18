@@ -102,5 +102,12 @@
 <script>
 export default {
  name: "RelatedProduct",
+ props: ["product"],
+ data() {
+  return {};
+ },
+ mounted() {
+  // console.log(product);
+ },
 };
 </script>
