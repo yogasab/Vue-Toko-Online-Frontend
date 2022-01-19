@@ -16,7 +16,20 @@
         <img :src="product.galleries[0].photo" alt="" />
         <ul>
          <li class="w-icon active">
-          <a href="#"><i class="icon_bag_alt"></i></a>
+          <a href="#">
+           <i
+            class="icon_bag_alt"
+            @click="
+             addToCart(
+              product.id,
+              product.name,
+              product.price,
+              product.galleries[0].photo
+             )
+            "
+           >
+           </i
+          ></a>
          </li>
          <li class="quick-view">
           <!-- <router-link :to="'/product/' + product.id">+ Quick View</router-link> -->
@@ -60,6 +73,7 @@ export default {
  data() {
   return {
    products: null,
+   carts: [],
   };
  },
  methods: {
@@ -67,14 +81,37 @@ export default {
    try {
     const products = await axios.get("http://127.0.0.1:8000/api/v1/products");
     this.products = products.data.data.data;
-    console.log(this.products);
    } catch (error) {
     console.log(error);
    }
   },
+  getCart() {
+   if (localStorage.getItem("carts")) {
+    try {
+     this.carts = JSON.parse(localStorage.getItem("carts"));
+    } catch (error) {
+     console.log(error);
+    }
+   }
+  },
+  addToCart(id, name, price, photo) {
+   let storedProduct = {
+    id,
+    name,
+    price,
+    photo,
+   };
+   // Add new stored product object to carts array
+   this.carts.push(storedProduct);
+   // Parse to string before set to Local Storage
+   const parsedCarts = JSON.stringify(this.carts);
+   // Set to Local Storage
+   localStorage.setItem("carts", parsedCarts);
+  },
  },
  mounted() {
   this.getProducts();
+  this.getCart();
  },
 };
 </script>

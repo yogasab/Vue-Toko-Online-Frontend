@@ -17,9 +17,9 @@
      <div class="row">
       <div class="col-lg-2 col-md-2">
        <div class="logo">
-        <a href="./index.html">
+        <router-link to="/">
          <img src="img/logo_website_shayna.png" alt="" />
-        </a>
+        </router-link>
        </div>
       </div>
       <div class="col-lg-7 col-md-7"></div>
@@ -29,38 +29,31 @@
          Keranjang Belanja &nbsp;
          <a href="#">
           <i class="icon_bag_alt"></i>
-          <span>3</span>
+          <span>{{ carts.length }}</span>
          </a>
          <div class="cart-hover">
           <div class="select-items">
            <table>
-            <tbody>
-             <tr>
+            <tbody v-if="carts">
+             <tr v-for="(cart, index) in carts" :key="cart.id">
               <td class="si-pic">
-               <img src="img/select-product-1.jpg" alt="" />
+               <img :src="cart.photo" alt="" class="cart-gallery" />
               </td>
               <td class="si-text">
                <div class="product-selected">
-                <p>$60.00 x 1</p>
-                <h6>Kabino Bedside Table</h6>
+                <p>Rp{{ cart.price }}</p>
+                <h6>{{ cart.name }}</h6>
                </div>
               </td>
               <td class="si-close">
-               <i class="ti-close"></i>
+               <i class="ti-close" @click="removeCart(index)"></i>
               </td>
              </tr>
+            </tbody>
+            <tbody v-else>
              <tr>
-              <td class="si-pic">
-               <img src="img/select-product-2.jpg" alt="" />
-              </td>
-              <td class="si-text">
-               <div class="product-selected">
-                <p>$60.00 x 1</p>
-                <h6>Kabino Bedside Table</h6>
-               </div>
-              </td>
-              <td class="si-close">
-               <i class="ti-close"></i>
+              <td class="text-center text-lg">
+               <p>No products yet</p>
               </td>
              </tr>
             </tbody>
@@ -68,10 +61,14 @@
           </div>
           <div class="select-total">
            <span>total:</span>
-           <h5>$120.00</h5>
+           <h5>Rp{{ prices }}</h5>
           </div>
           <div class="select-button">
-           <a href="#" class="primary-btn view-card">VIEW CARD</a>
+           <a href="#" class="primary-btn view-card">
+            <router-link to="/cart" style="color: #fff">
+             VIEW CARD
+            </router-link>
+           </a>
            <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
           </div>
          </div>
@@ -89,5 +86,46 @@
 <script>
 export default {
  name: "Header",
+ data() {
+  return {
+   carts: [],
+   prices: null,
+  };
+ },
+ methods: {
+  getCart() {
+   if (localStorage.getItem("carts")) {
+    try {
+     this.carts = JSON.parse(localStorage.getItem("carts"));
+    } catch (error) {
+     console.log(error);
+    }
+   }
+  },
+  removeCart(index) {
+   this.carts.splice(index, 1);
+   this.addToCart();
+  },
+  addToCart() {
+   const parsedCart = JSON.stringify(this.carts);
+   localStorage.setItem("carts", parsedCart);
+  },
+  totalPrice() {
+   this.prices = this.carts.reduce(function (items, data) {
+    return items + data.price;
+   }, 0);
+  },
+ },
+ mounted() {
+  this.getCart();
+  this.totalPrice();
+ },
 };
 </script>
+
+<style scoped>
+.cart-gallery {
+ width: 80px;
+ height: 80px;
+}
+</style>

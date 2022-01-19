@@ -33,27 +33,15 @@
             <th>Action</th>
            </tr>
           </thead>
-          <tbody>
+          <tbody v-for="product in carts" :key="product.id">
            <tr>
             <td class="cart-pic first-row">
-             <img src="img/cart-page/product-1.jpg" />
+             <img :src="product.photo" />
             </td>
             <td class="cart-title first-row text-center">
-             <h5>Pure Pineapple</h5>
+             <h5>{{ product.name }}</h5>
             </td>
-            <td class="p-price first-row">$60.00</td>
-            <td class="delete-item">
-             <a href="#"><i class="material-icons"> close </i></a>
-            </td>
-           </tr>
-           <tr>
-            <td class="cart-pic first-row">
-             <img src="img/cart-page/product-1.jpg" />
-            </td>
-            <td class="cart-title first-row text-center">
-             <h5>Pure Pineapple</h5>
-            </td>
-            <td class="p-price first-row">$60.00</td>
+            <td class="p-price first-row">Rp{{ product.price }}</td>
             <td class="delete-item">
              <a href="#"><i class="material-icons"> close </i></a>
             </td>
@@ -115,16 +103,24 @@
         <div class="proceed-checkout text-left">
          <ul>
           <li class="subtotal">ID Transaction <span>#SH12000</span></li>
-          <li class="subtotal mt-3">Subtotal <span>$240.00</span></li>
-          <li class="subtotal mt-3">Pajak <span>10%</span></li>
-          <li class="subtotal mt-3">Total Biaya <span>$440.00</span></li>
+          <li class="subtotal mt-3">
+           Subtotal <span>Rp{{ price }}</span>
+          </li>
+          <li class="subtotal mt-3">
+           Pajak <span>10% of Rp{{ price }}</span>
+          </li>
+          <li class="subtotal mt-3">
+           Total Biaya <span>Rp{{ totalPrice }}</span>
+          </li>
           <li class="subtotal mt-3">Bank Transfer <span>Mandiri</span></li>
           <li class="subtotal mt-3">
            No. Rekening <span>2208 1996 1403</span>
           </li>
           <li class="subtotal mt-3">Nama Penerima <span>Shayna</span></li>
          </ul>
-         <router-link to="/success" class="proceed-btn">I ALREADY PAID</router-link>
+         <router-link to="/success" class="proceed-btn"
+          >I ALREADY PAID</router-link
+         >
         </div>
        </div>
       </div>
@@ -141,5 +137,38 @@ import Header from "../components/Header.vue";
 export default {
  name: "ShoppingCart",
  components: { Header },
+ data() {
+  return {
+   carts: [],
+  };
+ },
+ methods: {
+  getCart() {
+   if (localStorage.getItem("carts")) {
+    try {
+     this.carts = JSON.parse(localStorage.getItem("carts"));
+    } catch (error) {
+     console.log(error);
+    }
+   }
+  },
+ },
+ mounted() {
+  this.getCart();
+  this.getPrice();
+ },
+ computed: {
+  price() {
+   return this.carts.reduce(function (items, data) {
+    return items + data.price;
+   }, 0);
+  },
+  discountPrice() {
+   return (this.price * 10) / 100;
+  },
+  totalPrice() {
+   return this.price + this.discountPrice;
+  },
+ },
 };
 </script>

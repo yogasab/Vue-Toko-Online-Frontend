@@ -56,9 +56,19 @@
           <h4>Rp{{ product.price }}</h4>
          </div>
          <div class="quantity">
-          <router-link to="/cart" class="primary-btn pd-cart"
-           >Add To Cart</router-link
-          >
+          <a
+           @click="
+            addToCart(
+             product.id,
+             product.name,
+             product.price,
+             product.galleries[0].photo
+            )
+           "
+           href="#"
+           class="primary-btn pd-cart"
+           >Add To Cart
+          </a>
          </div>
         </div>
        </div>
@@ -88,6 +98,7 @@ export default {
   return {
    defaultPhoto: null,
    product: null,
+   carts: [],
   };
  },
  methods: {
@@ -103,9 +114,33 @@ export default {
    this.product = product.data.data;
    this.defaultPhoto = product.data.data.galleries[0].photo;
   },
+  addToCart(id, name, price, photo) {
+   let storedProduct = {
+    id,
+    name,
+    price,
+    photo,
+   };
+   // Add new stored product object to carts array
+   this.carts.push(storedProduct);
+   // Parse to string before set to Local Storage
+   const parsedCarts = JSON.stringify(this.carts);
+   // Set to Local Storage
+   localStorage.setItem("carts", parsedCarts);
+  },
+  getCart() {
+   if (localStorage.getItem("carts")) {
+    try {
+     this.carts = JSON.parse(localStorage.getItem("carts"));
+    } catch (error) {
+     console.log(error);
+    }
+   }
+  },
  },
  mounted() {
   this.getProduct();
+  this.getCart();
  },
 };
 </script>
