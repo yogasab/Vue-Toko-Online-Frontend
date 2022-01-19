@@ -62,6 +62,7 @@
             id="namaLengkap"
             aria-describedby="namaHelp"
             placeholder="Masukan Nama"
+            v-model="form.name"
            />
           </div>
           <div class="form-group">
@@ -72,6 +73,7 @@
             id="emailAddress"
             aria-describedby="emailHelp"
             placeholder="Masukan Email"
+            v-model="form.email"
            />
           </div>
           <div class="form-group">
@@ -82,6 +84,7 @@
             id="noHP"
             aria-describedby="noHPHelp"
             placeholder="Masukan No. HP"
+            v-model="form.phone_number"
            />
           </div>
           <div class="form-group">
@@ -90,6 +93,7 @@
             class="form-control"
             id="alamatLengkap"
             rows="3"
+            v-model="form.address"
            ></textarea>
           </div>
          </form>
@@ -118,8 +122,8 @@
           </li>
           <li class="subtotal mt-3">Nama Penerima <span>Shayna</span></li>
          </ul>
-         <router-link to="/success" class="proceed-btn"
-          >I ALREADY PAID</router-link
+         <a href="#" @click="submitTransactionForm(form)" class="proceed-btn"
+          >I ALREADY PAID</a
          >
         </div>
        </div>
@@ -134,12 +138,20 @@
 
 <script>
 import Header from "../components/Header.vue";
+import axios from "axios";
 export default {
  name: "ShoppingCart",
  components: { Header },
  data() {
   return {
    carts: [],
+   form: {
+    name: "",
+    email: "",
+    address: "",
+    phone_number: "",
+    transaction_status: "PENDING",
+   },
   };
  },
  methods: {
@@ -152,10 +164,24 @@ export default {
     }
    }
   },
+  submitTransactionForm(form) {
+   const transaction_details = this.carts.map((cart) => {
+    return cart.id;
+   });
+   const transaction_total = this.totalPrice;
+   const transaction = { ...form, transaction_details, transaction_total };
+
+   axios
+    .post("http://127.0.0.1:8000/api/v1/checkouts", transaction)
+    .then(() => {
+     localStorage.removeItem("carts");
+     this.$router.push("success");
+    })
+    .catch((error) => console.log(error));
+  },
  },
  mounted() {
   this.getCart();
-  this.getPrice();
  },
  computed: {
   price() {

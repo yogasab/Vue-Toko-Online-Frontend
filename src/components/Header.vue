@@ -50,9 +50,10 @@
               </td>
              </tr>
             </tbody>
+
             <tbody v-else>
              <tr>
-              <td class="text-center text-lg">
+              <td class="">
                <p>No products yet</p>
               </td>
              </tr>
