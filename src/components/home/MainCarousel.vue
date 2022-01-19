@@ -90,7 +90,7 @@ export default {
     try {
      this.carts = JSON.parse(localStorage.getItem("carts"));
     } catch (error) {
-     console.log(error);
+     localStorage.removeItem("carts");
     }
    }
   },
@@ -107,6 +107,7 @@ export default {
    const parsedCarts = JSON.stringify(this.carts);
    // Set to Local Storage
    localStorage.setItem("carts", parsedCarts);
+   window.location.reload();
   },
  },
  mounted() {

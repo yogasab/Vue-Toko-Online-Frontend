@@ -127,6 +127,7 @@ export default {
    const parsedCarts = JSON.stringify(this.carts);
    // Set to Local Storage
    localStorage.setItem("carts", parsedCarts);
+   window.location.reload();
   },
   getCart() {
    if (localStorage.getItem("carts")) {

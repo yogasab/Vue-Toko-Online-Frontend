@@ -35,7 +35,7 @@
           <div class="select-items">
            <table>
             <tbody v-if="carts">
-             <tr v-for="(cart, index) in carts" :key="cart.id">
+             <tr v-for="cart in carts" :key="cart.id">
               <td class="si-pic">
                <img :src="cart.photo" alt="" class="cart-gallery" />
               </td>
@@ -46,7 +46,7 @@
                </div>
               </td>
               <td class="si-close">
-               <i class="ti-close" @click="removeCart(index)"></i>
+               <i class="ti-close" @click="removeCart(cart.id)"></i>
               </td>
              </tr>
             </tbody>
@@ -103,7 +103,11 @@ export default {
     }
    }
   },
-  removeCart(index) {
+  removeCart(idx) {
+   let userCarts = JSON.parse(localStorage.getItem("carts"));
+   let a = userCarts.map((cart) => cart.id);
+
+   let index = a.findIndex((id) => id === idx);
    this.carts.splice(index, 1);
    this.addToCart();
   },
